@@ -48,30 +48,6 @@
               />
             </div>
             <div class="form-group p-0">
-              <label>Blur ({{ filterFunctions.blur }}px)</label>
-              <input
-                type="range"
-                class="form-control"
-                step="1"
-                min="0"
-                max="50"
-                v-model="filterFunctions.blur"
-                :disabled="!image"
-              />
-            </div>
-            <div class="form-group p-0">
-              <label>Sepia ({{ filterFunctions.sepia }})</label>
-              <input
-                type="range"
-                class="form-control"
-                step="0.1"
-                min="0"
-                max="1"
-                v-model="filterFunctions.sepia"
-                :disabled="!image"
-              />
-            </div>
-            <div class="form-group p-0">
               <label>Saturate ({{ filterFunctions.saturate }})</label>
               <input
                 type="range"
@@ -83,20 +59,6 @@
                 :disabled="!image"
               />
             </div>
-            <div class="form-group p-0">
-              <label>Opacity ({{ filterFunctions.opacity }})</label>
-              <input
-                type="range"
-                class="form-control"
-                step="0.1"
-                min="0"
-                max="1"
-                v-model="filterFunctions.opacity"
-                :disabled="!image"
-              />
-            </div>
-          </div>
-          <div class="col-md-6" :data-filter-disabled="!image">
             <div class="form-group p-0">
               <label>Brightness ({{ filterFunctions.brightness }})</label>
               <input
@@ -118,30 +80,6 @@
                 min="0"
                 max="10"
                 v-model="filterFunctions.contrast"
-                :disabled="!image"
-              />
-            </div>
-            <div class="form-group p-0">
-              <label>Hue-rotate ({{ filterFunctions.hueRotate }}deg)</label>
-              <input
-                type="range"
-                class="form-control"
-                step="1"
-                min="-360"
-                max="360"
-                v-model="filterFunctions.hueRotate"
-                :disabled="!image"
-              />
-            </div>
-            <div class="form-group p-0">
-              <label>Invert ({{ filterFunctions.invert }})</label>
-              <input
-                type="range"
-                class="form-control"
-                step="0.1"
-                min="0"
-                max="2"
-                v-model="filterFunctions.invert"
                 :disabled="!image"
               />
             </div>
@@ -211,21 +149,10 @@ export default {
     defaultValues() {
       return {
         grayscale: 0,
-        sepia: 0,
         saturate: 1,
-        hueRotate: 0,
-        invert: 0,
         brightness: 1,
-        contrast: 1,
-        blur: 0,
-        opacity: 1
+        contrast: 1
       };
-    },
-    changeImage(e) {
-      var files = e.target.files || e.dataTransfer.files;
-      if (!files.length) return;
-
-      this.loadImage(files[0]);
     },
     loadImage(file) {
       var reader = new FileReader();
@@ -244,58 +171,6 @@ export default {
           .getElementById("image")
           .setAttribute("data-original-height", this.height);
       };
-    },
-    presets() {
-      return {
-        brannes: { name: "Brannes", filterSet: { sepia: 0.5, contrast: 1.4 } },
-        inkwell: {
-          name: "Inkwell",
-          filterSet: {
-            sepia: 0.3,
-            contrast: 1.1,
-            brightness: 1.1,
-            grayscale: 1
-          }
-        },
-        lofi: { name: "Lo-Fi", filterSet: { saturate: 1.1, contrast: 1.5 } },
-        moon: {
-          name: "Moon",
-          filterSet: { grayscale: 1, contrast: 1.1, brightness: 1.1 }
-        },
-        nashville: {
-          name: "Nashville",
-          filterSet: {
-            sepia: 0.2,
-            contrast: 1.2,
-            brightness: 1.05,
-            saturate: 1.2
-          }
-        },
-        toaster: {
-          name: "Toaster",
-          filterSet: { contrast: 1.5, brightness: 0.9 }
-        },
-        walden: {
-          name: "Walden",
-          filterSet: {
-            brightness: 1.1,
-            hueRotate: "-10",
-            sepia: 0.3,
-            saturate: 1.6
-          }
-        },
-        willow: {
-          name: "Willow",
-          filterSet: { grayscale: 0.5, contrast: 0.95, brightness: 0.9 }
-        },
-        xpro2: { name: "X-pro II", filterSet: { sepia: 0.3 } }
-      };
-    },
-    selectAndLoadPreset(preset) {
-      if (preset) {
-        this.filterFunctions = preset.filterSet;
-        this.selectedPreset = preset;
-      }
     },
     download() {
       const canvas = document.createElement("canvas");
@@ -326,18 +201,6 @@ export default {
   created() {
     this.image = this.defaultImage();
     this.filterFunctions = this.defaultValues();
-  },
-  watch: {
-    textCopied() {
-      setTimeout(
-        function() {
-          if (this.textCopied == true) {
-            this.textCopied = false;
-          }
-        }.bind(this),
-        350
-      );
-    }
   },
   computed: {
     filters() {
